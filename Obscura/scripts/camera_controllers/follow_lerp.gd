@@ -1,27 +1,50 @@
-class_name PositionLock
+class_name FollowLerp
 extends CameraControllerBase
 
 
-# Called when the node enters the scene tree for the first time.
+@export var follow_speed:float = 0.8
+@export var catchup_speed:float = 0.3
+@export var leash_distance:float = 5.0
+
+
 func _ready() -> void:
 	super()
 	position = target.position
+	
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if !current:
+		position = target.position
 		return
 	
 	if draw_camera_logic:
 		draw_logic()
 	
+	var tvel := target.velocity
 	var tpos := target.global_position
+	var cpos := global_position
+	var dist_from_target := sqrt((tpos.x - cpos.x) ** 2 + (tpos.z - cpos.z) ** 2)
 	
-	global_position.x = tpos.x
-	global_position.z = tpos.z
+	if tvel == Vector3(0, 0, 0):
+		if dist_from_target < catchup_speed:
+			position = target.position
+		else:
+			global_position.x += (tpos.x - cpos.x) * catchup_speed / dist_from_target
+			global_position.z += (tpos.z - cpos.z) * catchup_speed / dist_from_target
+	else:
+		global_position.x += tvel.x * follow_speed * delta
+		global_position.z += tvel.z * follow_speed * delta
+	
+	cpos = global_position
+	dist_from_target = sqrt((tpos.x - cpos.x) ** 2 + (tpos.z - cpos.z) ** 2)
+	var angle = Vector2(cpos.x, cpos.z).angle_to_point(Vector2(tpos.x, tpos.z))
+	
+	if dist_from_target > leash_distance:
+		global_position.x = tpos.x - leash_distance * cos(angle)
+		global_position.z = tpos.z - leash_distance * sin(angle)
 	
 	super(delta)
+
 
 func draw_logic() -> void:
 	var mesh_instance := MeshInstance3D.new()

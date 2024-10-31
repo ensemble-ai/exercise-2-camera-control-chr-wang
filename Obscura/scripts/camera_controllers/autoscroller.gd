@@ -23,28 +23,28 @@ func _process(delta: float) -> void:
 	global_position += autoscroll_speed
 	target.global_position += autoscroll_speed
 	
-	var tpos = target.global_position
-	var cpos = global_position
-	var left_edge = cpos.x + top_left.x
-	var right_edge = cpos.x + bottom_right.x
-	var top_edge = cpos.z + top_left.y
-	var bottom_edge = cpos.z + bottom_right.y
+	var tpos := target.global_position
+	var cpos := global_position
+	var left_edge := cpos.x + top_left.x
+	var right_edge := cpos.x + bottom_right.x
+	var top_edge := cpos.z + top_left.y
+	var bottom_edge := cpos.z + bottom_right.y
 	
 	#boundary checks
 	#left
-	var diff_between_left_edges = (tpos.x - target.WIDTH / 2.0) - left_edge
+	var diff_between_left_edges := (tpos.x - target.WIDTH / 2.0) - left_edge
 	if diff_between_left_edges < 0:
 		target.global_position.x -= diff_between_left_edges
 	#right
-	var diff_between_right_edges = (tpos.x + target.WIDTH / 2.0) - right_edge
+	var diff_between_right_edges := (tpos.x + target.WIDTH / 2.0) - right_edge
 	if diff_between_right_edges > 0:
 		target.global_position.x -= diff_between_right_edges
 	#top
-	var diff_between_top_edges = (tpos.z - target.HEIGHT / 2.0) - top_edge
+	var diff_between_top_edges := (tpos.z - target.HEIGHT / 2.0) - top_edge
 	if diff_between_top_edges < 0:
 		target.global_position.z -= diff_between_top_edges
 	#bottom
-	var diff_between_bottom_edges = (tpos.z + target.HEIGHT / 2.0) - bottom_edge
+	var diff_between_bottom_edges := (tpos.z + target.HEIGHT / 2.0) - bottom_edge
 	if diff_between_bottom_edges > 0:
 		target.global_position.z -= diff_between_bottom_edges
 	

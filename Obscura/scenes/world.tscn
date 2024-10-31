@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=4 uid="uid://88du8yjefx8j"]
+[gd_scene load_steps=13 format=4 uid="uid://88du8yjefx8j"]
 
 [ext_resource type="PackedScene" uid="uid://dtm13sp1jsrwi" path="res://scenes/vessel.tscn" id="1_oaql3"]
 [ext_resource type="Script" path="res://scripts/camera_selector.gd" id="2_qffo5"]
@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://6tbtl0jk0dlo" path="res://assets/audio/VGMA Challenge - July 16th.wav" id="5_o8tm3"]
 [ext_resource type="Script" path="res://scripts/camera_controllers/position_lock.gd" id="5_rbwgr"]
 [ext_resource type="Script" path="res://scripts/camera_controllers/autoscroller.gd" id="6_in4og"]
+[ext_resource type="Script" path="res://scripts/camera_controllers/follow_lerp.gd" id="7_e60ns"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_1b02m"]
 _surfaces = [{
@@ -43,7 +44,7 @@ terrain_manager = NodePath("../TerrainManager")
 
 [node name="CameraSelector" type="Node" parent="." node_paths=PackedStringArray("cameras")]
 script = ExtResource("2_qffo5")
-cameras = [NodePath("../PushBoxCamera3"), NodePath("../PushBoxCamera2"), NodePath("../PushBoxCamera"), NodePath("../PositionLockCamera"), NodePath("../AutoscrollerCamera")]
+cameras = [NodePath("../PushBoxCamera3"), NodePath("../PushBoxCamera2"), NodePath("../PushBoxCamera"), NodePath("../PositionLockCamera"), NodePath("../AutoscrollerCamera"), NodePath("../FollowLerpCamera")]
 
 [node name="PushBoxCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_ttnp6")]
 transform = Transform3D(1, 0, 0, 0, 1.19249e-08, 1, 0, -1, 1.19249e-08, 0, 30, 0)
@@ -82,11 +83,34 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 30,
 script = ExtResource("5_rbwgr")
 target = NodePath("../Vessel")
 
+[node name="debug" type="Label" parent="PositionLockCamera"]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("3_4fllx")
+
 [node name="AutoscrollerCamera" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 30, 0)
 script = ExtResource("6_in4og")
 autoscroll_speed = Vector3(0.25, 0, 0.1)
 target = NodePath("../Vessel")
+
+[node name="debug" type="Label" parent="AutoscrollerCamera"]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("3_4fllx")
+
+[node name="FollowLerpCamera" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 30, 0)
+script = ExtResource("7_e60ns")
+target = NodePath("../Vessel")
+
+[node name="debug" type="Label" parent="FollowLerpCamera"]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("3_4fllx")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866025, -0.5, 0, -2.18557e-08, -3.78552e-08, 1, -0.5, -0.866025, -4.37114e-08, 0, 70, 0)
