@@ -1,15 +1,21 @@
-class_name FollowLerp
+class_name LeadLerp
 extends CameraControllerBase
 
 
-@export var follow_speed:float = 0.8
+@export var lead_speed:float = 1.2
+@export var catchup_delay_duration:float = 0.2
 @export var catchup_speed:float = 0.3
 @export var leash_distance:float = 5.0
 
+var _timer := Timer.new()
+var _just_moved:bool = false
 
 func _ready() -> void:
 	super()
 	position = target.position
+	add_child(_timer)
+	_timer.wait_time = catchup_delay_duration
+	_timer.one_shot = true
 	
 
 func _process(delta: float) -> void:
@@ -26,7 +32,16 @@ func _process(delta: float) -> void:
 	var dist_from_target := sqrt((tpos.x - cpos.x) ** 2 + (tpos.z - cpos.z) ** 2)
 	
 	if tvel == Vector3(0, 0, 0):
-		# Move toward target once it stops
+		# Start catchup delay timer if target just moved but is now stopped
+		if _just_moved:
+			_just_moved = false
+			_timer.start()
+		
+		# Skip catchup if delay timer is not finished
+		if !_timer.is_stopped():
+			return
+		
+		# Move toward target once it stops and delay timer is finished
 		if dist_from_target < catchup_speed:
 			position = target.position
 		else:
@@ -34,8 +49,10 @@ func _process(delta: float) -> void:
 			global_position.z += (tpos.z - cpos.z) * catchup_speed / dist_from_target
 	else:
 		# Move in the direction of the target
-		global_position.x += tvel.x * follow_speed * delta
-		global_position.z += tvel.z * follow_speed * delta
+		_just_moved = true
+		_timer.stop()
+		global_position.x += tvel.x * lead_speed * delta
+		global_position.z += tvel.z * lead_speed * delta
 		
 		cpos = global_position
 		dist_from_target = sqrt((tpos.x - cpos.x) ** 2 + (tpos.z - cpos.z) ** 2)
