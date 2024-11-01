@@ -30,20 +30,20 @@ func _process(delta: float) -> void:
 	var top_edge := cpos.z + top_left.y
 	var bottom_edge := cpos.z + bottom_right.y
 	
-	#boundary checks
-	#left
+	# Boundary checks
+	# Left
 	var diff_between_left_edges := (tpos.x - target.WIDTH / 2.0) - left_edge
 	if diff_between_left_edges < 0:
 		target.global_position.x -= diff_between_left_edges
-	#right
+	# Right
 	var diff_between_right_edges := (tpos.x + target.WIDTH / 2.0) - right_edge
 	if diff_between_right_edges > 0:
 		target.global_position.x -= diff_between_right_edges
-	#top
+	# Top
 	var diff_between_top_edges := (tpos.z - target.HEIGHT / 2.0) - top_edge
 	if diff_between_top_edges < 0:
 		target.global_position.z -= diff_between_top_edges
-	#bottom
+	# Bottom
 	var diff_between_bottom_edges := (tpos.z + target.HEIGHT / 2.0) - bottom_edge
 	if diff_between_bottom_edges > 0:
 		target.global_position.z -= diff_between_bottom_edges
