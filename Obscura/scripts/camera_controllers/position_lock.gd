@@ -16,10 +16,7 @@ func _process(delta: float) -> void:
 	if draw_camera_logic:
 		draw_logic()
 	
-	var tpos := target.global_position
-	
-	global_position.x = tpos.x
-	global_position.z = tpos.z
+	position = target.position
 	
 	super(delta)
 

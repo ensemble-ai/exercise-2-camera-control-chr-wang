@@ -30,27 +30,34 @@ func _process(delta: float) -> void:
 	# Left
 	var diff_between_left_edges = (tpos.x - target.WIDTH / 2.0) - (cpos.x + pushbox_top_left.x)
 	var diff_from_left_push = (tpos.x + target.WIDTH / 2.0) - (cpos.x + speedup_zone_top_left.x)
+	
 	if diff_between_left_edges < 0:
 		global_position.x += diff_between_left_edges
 	elif diff_from_left_push < 0 and tvel.x < 0:
 		global_position.x += tvel.x * push_ratio * delta
+	
 	# Right
 	var diff_between_right_edges = (tpos.x + target.WIDTH / 2.0) - (cpos.x + pushbox_bottom_right.x)
 	var diff_from_right_push = (tpos.x - target.WIDTH / 2.0) - (cpos.x + speedup_zone_bottom_right.x)
+	
 	if diff_between_right_edges > 0:
 		global_position.x += diff_between_right_edges
 	elif diff_from_right_push > 0 and tvel.x > 0:
 		global_position.x += tvel.x * push_ratio * delta
+	
 	# Top
 	var diff_between_top_edges = (tpos.z - target.HEIGHT / 2.0) - (cpos.z + pushbox_top_left.y)
 	var diff_from_top_push = (tpos.z + target.WIDTH / 2.0) - (cpos.z + speedup_zone_top_left.y)
+	
 	if diff_between_top_edges < 0:
 		global_position.z += diff_between_top_edges
 	elif diff_from_top_push < 0 and tvel.z < 0:
 		global_position.z += tvel.z * push_ratio * delta
+	
 	# Bottom
 	var diff_between_bottom_edges = (tpos.z + target.HEIGHT / 2.0) - (cpos.z + pushbox_bottom_right.y)
 	var diff_from_bottom_push = (tpos.z - target.WIDTH / 2.0) - (cpos.z + speedup_zone_bottom_right.y)
+	
 	if diff_between_bottom_edges > 0:
 		global_position.z += diff_between_bottom_edges
 	elif diff_from_bottom_push > 0 and tvel.z > 0:

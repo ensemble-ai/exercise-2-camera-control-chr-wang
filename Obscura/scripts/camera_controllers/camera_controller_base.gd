@@ -42,6 +42,5 @@ func _process(delta: float) -> void:
 	position.y = target.position.y + dist_above_target
 
 
-
 func draw_logic() -> void:
 	pass
